@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dark Mode Form</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container-fluid vh-100 d-flex align-items-center justify-content-center">
+        <div class="row justify-content-center w-100">
+            <div class="col-md-6 col-lg-4">
+                <div class="card">
+                    <div class="card-body p-5">
+                        <h2 class="card-title text-center mb-4">Number Input Form</h2>
+                        <form>
+                            <div class="mb-3">
+                                <label for="number1" class="form-label">First Number</label>
+                                <input type="number" class="form-control form-control-lg" id="number1" placeholder="Enter first number">
+                            </div>
+                            <div class="mb-3">
+                                <label for="number2" class="form-label">Second Number</label>
+                                <input type="number" class="form-control form-control-lg" id="number2" placeholder="Enter second number">
+                            </div>
+                            <div class="mb-4">
+                                <label for="number3" class="form-label">Third Number</label>
+                                <input type="number" class="form-control form-control-lg" id="number3" placeholder="Enter third number">
+                            </div>
+                            <div class="d-grid">
+                                <button type="button" 
+                                onclick="calcular()" class="btn btn-primary btn-lg">Submit</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
+
+
+<script>
+    function calcular(){
+
+            let a = 0;
+        let y = 35;
+        let i = 0;
+
+        while (a < 10000) {
+        a += y;
+        i++;
+            if (i % 20 === 0) {
+                y += 5;
+            }
+        }
+
+console.log(a);
+console.log(y);
+console.log(i);
+
+
+    }
+</script>

@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Points Calculator</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        .calculator-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .form-control:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+        }
+        
+        .btn-calculate {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            padding: 12px 30px;
+            border-radius: 50px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-calculate:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+        }
+        
+        .result-card {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            border-radius: 15px;
+            color: white;
+            animation: fadeInUp 0.5s ease-out;
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .input-group-text {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+        }
+        
+        .progress-bar {
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .step-indicator {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 10px;
+            margin: 5px 0;
+            padding: 8px 12px;
+            border-left: 4px solid #667eea;
+        }
+    </style>
+</head>
+<body>
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="calculator-card p-5">
+                    <div class="text-center mb-4">
+                        <h1 class="display-5 fw-bold text-primary mb-3">
+                            <i class="fas fa-calculator me-3"></i>Points Calculator
+                        </h1>
+                        <p class="lead text-muted">Calculate total points with progressive increases</p>
+                    </div>
+
+                    <form id="calculatorForm">
+                        <div class="row g-4">
+                            <div class="col-md-6">
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fas fa-hashtag"></i></span>
+                                    <input type="number" class="form-control" id="total" value="100" min="1" required>
+                                    <span class="input-group-text">Total Iterations</span>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fas fa-star"></i></span>
+                                    <input type="number" class="form-control" id="pointsPerEdge" value="5" min="0" required>
+                                    <span class="input-group-text">Points per Edge</span>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fas fa-arrow-up"></i></span>
+                                    <input type="number" class="form-control" id="increasePerMultiplier" value="4" min="0" required>
+                                    <span class="input-group-text">Increase Amount</span>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fas fa-repeat"></i></span>
+                                    <input type="number" class="form-control" id="mult" value="50" min="1" required>
+                                    <span class="input-group-text">Multiplier Interval</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="text-center mt-4">
+                            <button type="submit" class="btn btn-primary btn-calculate btn-lg">
+                                <i class="fas fa-play me-2"></i>Calculate Points
+                            </button>
+                        </div>
+                    </form>
+
+                    <div id="results" class="mt-5" style="display: none;">
+                        <div class="result-card p-4">
+                            <h3 class="text-center mb-4">
+                                <i class="fas fa-chart-line me-2"></i>Calculation Results
+                            </h3>
+                            
+                            <div class="row text-center">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <h4 class="display-6 fw-bold" id="finalPointsPerEdge">0</h4>
+                                        <p class="mb-0">Final Points per Edge</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <h4 class="display-6 fw-bold" id="totalPoints">0</h4>
+                                        <p class="mb-0">Total Points Accumulated</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mt-4">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <h5><i class="fas fa-list me-2"></i>Calculation Steps</h5>
+                                <button class="btn btn-outline-primary btn-sm" id="toggleSteps">
+                                    <i class="fas fa-eye me-1"></i>Show Details
+                                </button>
+                            </div>
+                            <div id="stepsList" style="display: none;">
+                                <div class="progress mb-3">
+                                    <div class="progress-bar" role="progressbar" id="progressBar" style="width: 0%"></div>
+                                </div>
+                                <div id="stepsContainer" style="max-height: 300px; overflow-y: auto;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function calculatePoints() {
+            const total = parseInt(document.getElementById('total').value);
+            const initialPointsPerEdge = parseInt(document.getElementById('pointsPerEdge').value);
+            const increasePerMultiplier = parseInt(document.getElementById('increasePerMultiplier').value);
+            const mult = parseInt(document.getElementById('mult').value);
+            
+            let pointsPerEdge = initialPointsPerEdge;
+            let i = 1;
+            let totalpoints = 0;
+            const steps = [];
+            
+            while (i < total) {
+                totalpoints += pointsPerEdge;
+                
+                steps.push({
+                    iteration: i,
+                    pointsAdded: pointsPerEdge,
+                    totalSoFar: totalpoints,
+                    currentPointsPerEdge: pointsPerEdge
+                });
+                
+                if (i % mult === 0) {
+                    pointsPerEdge += increasePerMultiplier;
+                    steps[steps.length - 1].increased = true;
+                    steps[steps.length - 1].newPointsPerEdge = pointsPerEdge;
+                }
+                
+                i++;
+            }
+            
+            return {
+                finalPointsPerEdge: pointsPerEdge,
+                totalPoints: totalpoints,
+                steps: steps
+            };
+        }
+
+        function displayResults(result) {
+            document.getElementById('finalPointsPerEdge').textContent = result.finalPointsPerEdge;
+            document.getElementById('totalPoints').textContent = result.totalPoints.toLocaleString();
+            
+            const stepsContainer = document.getElementById('stepsContainer');
+            stepsContainer.innerHTML = '';
+            
+            result.steps.forEach(step => {
+                const stepDiv = document.createElement('div');
+                stepDiv.className = 'step-indicator';
+                stepDiv.innerHTML = `
+                    <strong>Step ${step.iteration}:</strong> +${step.pointsAdded} points 
+                    <span class="text-muted">(Total: ${step.totalSoFar.toLocaleString()})</span>
+                    ${step.increased ? `<span class="text-success ms-2"><i class="fas fa-arrow-up"></i> Increased to ${step.newPointsPerEdge}</span>` : ''}
+                `;
+                stepsContainer.appendChild(stepDiv);
+            });
+            
+            document.getElementById('results').style.display = 'block';
+            document.getElementById('results').scrollIntoView({ behavior: 'smooth' });
+            
+            // Animate progress bar
+            const progressBar = document.getElementById('progressBar');
+            progressBar.style.width = '100%';
+        }
+
+        document.getElementById('calculatorForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const result = calculatePoints();
+            displayResults(result);
+        });
+
+        document.getElementById('toggleSteps').addEventListener('click', function() {
+            const stepsList = document.getElementById('stepsList');
+            const isVisible = stepsList.style.display !== 'none';
+            
+            stepsList.style.display = isVisible ? 'none' : 'block';
+            this.innerHTML = isVisible ? 
+                '<i class="fas fa-eye me-1"></i>Show Details' : 
+                '<i class="fas fa-eye-slash me-1"></i>Hide Details';
+        });
+
+        // Calculate on page load with default values
+        window.addEventListener('load', function() {
+            const result = calculatePoints();
+            displayResults(result);
+        });
+    </script>
+</body>
+</html>
